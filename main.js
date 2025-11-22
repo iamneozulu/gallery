@@ -1,3 +1,93 @@
 import * as THREE from './node_modules/three';
-import * as CELESTIAL from './celestialObjects.js';
-import { RGBELoader } from './node_modules/three/examples/jsm/loaders/RGBELoader.js';
+import { GLTFLoader } from './node_modules/three/examples/jsm/Addons.js';
+
+let renderer, scene, camera, raycaster, loader;
+
+init();
+animate();
+
+function init() {
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87ceeb);
+
+    // Camera
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.75, 4);
+
+    // Raycaster
+    raycaster = new THREE.Raycaster();
+i
+    // Loader-------------------------------------------------------------------------------------
+    loader = new GLTFLoader();
+    // Load Gallery Scene
+
+
+
+    loader.load('./public/models/gallery_scene.gltf', function (gltf) {
+        const Gallery = gltf.scene;
+        scene.add(Gallery);
+    }, undefined, function (error) {
+        console.error(error);
+    });
+    // Load Solar System Frame
+    FrameMaker('./public/models/solar_system_frame.gltf', [0, 0.75, -5.6], [1, 1, 1]);
+    // Load Periodic Table Frame
+    FrameMaker('./public/models/periodic_table_frame.gltf', [-2.85, 1, -3], [0.7, 0.7, 0.7]);
+
+    //--------------------------------------------------------------------------------------------
+
+
+    // Event Listeners----------------------------------------------------------------------------
+    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('click', onMouseClick, false);
+    //--------------------------------------------------------------------------------------------
+}
+
+// Handles window resizing
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// Handles mouse click events
+function onMouseClick(event) {
+    event.preventDefault();
+    const mouse = new THREE.Vector2(
+        (event.clientX / window.innerWidth) * 2 - 1,
+        -(event.clientY / window.innerHeight) * 2 + 1
+    );
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+        if (intersectedObject.userData.info) {
+            alert(intersectedObject.userData.info);
+        }
+    }
+}
+
+// Frame maker
+function FrameMaker(texturePath, position, scale) {
+    loader.load(texturePath, function (gltf) {
+        const model = gltf.scene;
+        model.position.set(position[0], position[1], position[2]);
+        model.scale.set(scale[0], scale[1], scale[2]);
+        scene.add(model);
+    }, undefined, function (error) {
+        console.error(error);
+    });
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}

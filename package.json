@@ -1,0 +1,23 @@
+{
+  "name": "gallery",
+  "version": "1.0.0",
+  "description": "The gallery is a website housing links to all my other projects in the style of a gallery",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamneozulu/gallery.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iamneozulu/gallery/issues"
+  },
+  "homepage": "https://github.com/iamneozulu/gallery#readme",
+  "dependencies": {
+    "three": "^0.181.2"
+  }
+}
