@@ -22,7 +22,7 @@ function init() {
 
     // Raycaster
     raycaster = new THREE.Raycaster();
-i
+
     // Loader-------------------------------------------------------------------------------------
     loader = new GLTFLoader();
     // Load Gallery Scene
